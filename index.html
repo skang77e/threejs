@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="canvas" width="500" height="500"></canvas>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.141.0/build/three.module.js",
+        "GLTFLoader": "https://unpkg.com/three@0.141.0/examples/jsm/loaders/GLTFLoader.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import { GLTFLoader } from 'GLTFLoader';
+    import * as THREE from 'three';
+
+    // Create scene
+    const scene = new THREE.Scene();
+    // Create renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.querySelector('#canvas'), // select where to render
+      antialias: true // handle pixelated issue 
+    });
+
+    // Due to GLTF's encoding
+    // Set texture encoding property
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    // Set Camera
+    const camera = new THREE.PerspectiveCamera(30, 1);
+
+    // Set Camera position x y and z
+    camera.position.set(0, 0, 3);
+
+    // Set background
+    // scene.background = new THREE.Color('white');
+
+    // Create loader to load GLTF file
+    const loader = new GLTFLoader();
+    loader.load('cesar-louvre_museum/scene.gltf', function (gltf) {
+      scene.add(gltf.scene);
+
+      // Add animate
+      function animate() {
+        requestAnimationFrame(animate)
+        gltf.scene.rotation.y += 0.005
+        renderer.render(scene, camera);
+      }
+      animate()
+    });
+
+  </script>
+</body>
+
+</html>
